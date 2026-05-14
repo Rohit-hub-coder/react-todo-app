@@ -1,8 +1,23 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #0f172a;
+  font-family: Arial, sans-serif;
+}
+
 .app {
   max-width: 500px;
-  margin: 50px auto;
-  font-family: Arial, sans-serif;
-  padding: 20px;
+  margin: 60px auto;
+  background: #1e293b;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+h1 {
+  text-align: center;
+  color: white;
+  margin-bottom: 25px;
 }
 
 .input-area {
@@ -13,13 +28,26 @@
 
 .input-area input {
   flex: 1;
-  padding: 10px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  font-size: 16px;
 }
 
-.input-area button,
-.todo-list button {
-  padding: 10px 14px;
+.input-area button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: white;
   cursor: pointer;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.input-area button:hover {
+  background: #2563eb;
 }
 
 .todo-list {
@@ -28,13 +56,15 @@
 }
 
 .todo-list li {
+  background: #334155;
+  color: white;
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #f4f4f4;
-  border-radius: 8px;
 }
 
 .todo-list li span {
@@ -43,5 +73,19 @@
 
 .todo-list li.done span {
   text-decoration: line-through;
-  color: gray;
+  color: #94a3b8;
+}
+
+.todo-list button {
+  border: none;
+  background: #ef4444;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.todo-list button:hover {
+  background: #dc2626;
 }
