@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./App.css";
 
 function App() {
   const [task, setTask] = useState("");
@@ -7,53 +8,48 @@ function App() {
   const addTask = () => {
     if (task.trim() === "") return;
 
-    setTodos([...todos, task]);
+    setTodos([
+      ...todos,
+      {
+        id: Date.now(),
+        text: task,
+        completed: false,
+      },
+    ]);
     setTask("");
   };
 
-  const deleteTask = (index) => {
-    const updatedTodos = todos.filter((_, i) => i !== index);
-    setTodos(updatedTodos);
+  const deleteTask = (id) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
+  const toggleComplete = (id) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
   };
 
   return (
-    <div style={{ padding: "40px", fontFamily: "Arial" }}>
+    <div className="app">
       <h1>Todo App</h1>
 
-      <input
-        type="text"
-        placeholder="Enter task..."
-        value={task}
-        onChange={(e) => setTask(e.target.value)}
-        style={{
-          padding: "10px",
-          width: "250px",
-          marginRight: "10px",
-        }}
-      />
+      <div className="input-area">
+        <input
+          type="text"
+          placeholder="Enter task..."
+          value={task}
+          onChange={(e) => setTask(e.target.value)}
+        />
+        <button onClick={addTask}>Add</button>
+      </div>
 
-      <button onClick={addTask} style={{ padding: "10px" }}>
-        Add
-      </button>
-
-      <ul style={{ marginTop: "20px" }}>
-        {todos.map((todo, index) => (
-          <li key={index} style={{ marginBottom: "10px" }}>
-            {todo}
-
-            <button
-              onClick={() => deleteTask(index)}
-              style={{
-                marginLeft: "10px",
-                backgroundColor: "red",
-                color: "white",
-                border: "none",
-                padding: "5px 10px",
-                cursor: "pointer",
-              }}
-            >
-              Delete
-            </button>
+      <ul className="todo-list">
+        {todos.map((todo) => (
+          <li key={todo.id} className={todo.completed ? "done" : ""}>
+            <span onClick={() => toggleComplete(todo.id)}>{todo.text}</span>
+            <button onClick={() => deleteTask(todo.id)}>Delete</button>
           </li>
         ))}
       </ul>
