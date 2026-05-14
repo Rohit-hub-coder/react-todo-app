@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
- const [task, setTask] = useState("");
-const [editId, setEditId] = useState(null);
-const [editText, setEditText] = useState("");
+  const [task, setTask] = useState("");
+  const [editId, setEditId] = useState(null);
+  const [editText, setEditText] = useState("");
+  const [filter, setFilter] = useState("all");
 
   const [todos, setTodos] = useState(() => {
     const savedTodos = localStorage.getItem("todos");
@@ -34,18 +35,32 @@ const [editText, setEditText] = useState("");
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
-const saveEdit = (id) => {
-  setTodos(
-    todos.map((todo) =>
-      todo.id === id
-        ? { ...todo, text: editText }
-        : todo
-    )
-  );
+  const toggleComplete = (id) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
 
-  setEditId(null);
-  setEditText("");
-};
+  const saveEdit = (id) => {
+    if (editText.trim() === "") return;
+
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, text: editText } : todo
+      )
+    );
+
+    setEditId(null);
+    setEditText("");
+  };
+
+  const filteredTodos = todos.filter((todo) => {
+    if (filter === "completed") return todo.completed;
+    if (filter === "pending") return !todo.completed;
+    return true;
+  });
 
   return (
     <div className="app">
@@ -58,52 +73,61 @@ const saveEdit = (id) => {
           value={task}
           onChange={(e) => setTask(e.target.value)}
         />
-
         <button onClick={addTask}>Add</button>
       </div>
 
-     <ul className="todo-list">
-  {todos.map((todo) => (
-    <li
-      key={todo.id}
-      className={todo.completed ? "done" : ""}
-    >
-      {editId === todo.id ? (
-        <>
-          <input
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
-          />
+      <div className="filter-area">
+        <button
+          onClick={() => setFilter("all")}
+          className={filter === "all" ? "active-filter" : ""}
+        >
+          All
+        </button>
+        <button
+          onClick={() => setFilter("completed")}
+          className={filter === "completed" ? "active-filter" : ""}
+        >
+          Completed
+        </button>
+        <button
+          onClick={() => setFilter("pending")}
+          className={filter === "pending" ? "active-filter" : ""}
+        >
+          Pending
+        </button>
+      </div>
 
-          <button onClick={() => saveEdit(todo.id)}>
-            Save
-          </button>
-        </>
-      ) : (
-        <>
-          <span onClick={() => toggleComplete(todo.id)}>
-            {todo.text}
-          </span>
+      <ul className="todo-list">
+        {filteredTodos.map((todo) => (
+          <li key={todo.id} className={todo.completed ? "done" : ""}>
+            {editId === todo.id ? (
+              <>
+                <input
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                />
+                <button onClick={() => saveEdit(todo.id)}>Save</button>
+              </>
+            ) : (
+              <>
+                <span onClick={() => toggleComplete(todo.id)}>{todo.text}</span>
 
-          <div>
-            <button
-              onClick={() => {
-                setEditId(todo.id);
-                setEditText(todo.text);
-              }}
-            >
-              Edit
-            </button>
-
-            <button onClick={() => deleteTask(todo.id)}>
-              Delete
-            </button>
-          </div>
-        </>
-      )}
-    </li>
-  ))}
-</ul>
+                <div>
+                  <button
+                    onClick={() => {
+                      setEditId(todo.id);
+                      setEditText(todo.text);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button onClick={() => deleteTask(todo.id)}>Delete</button>
+                </div>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

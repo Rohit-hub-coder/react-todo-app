@@ -89,3 +89,22 @@ h1 {
 .todo-list button:hover {
   background: #dc2626;
 }
+
+.filter-area {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-area button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: #475569;
+  color: white;
+  cursor: pointer;
+}
+
+.filter-area button.active-filter {
+  background: #22c55e;
+}
