@@ -62,6 +62,12 @@ function App() {
     return true;
   });
 
+
+
+const totalTasks = todos.length;
+const completedTasks = todos.filter((todo) => todo.completed).length;
+const pendingTasks = totalTasks - completedTasks;
+
   return (
     <div className="app">
       <h1>Todo App</h1>
@@ -96,6 +102,12 @@ function App() {
           Pending
         </button>
       </div>
+
+  <div className="stats">
+  <p>Total: {totalTasks}</p>
+  <p>Completed: {completedTasks}</p>
+  <p>Pending: {pendingTasks}</p>
+</div>
 
       <ul className="todo-list">
         {filteredTodos.map((todo) => (
