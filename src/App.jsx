@@ -1,9 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
   const [task, setTask] = useState("");
-  const [todos, setTodos] = useState([]);
+
+  const [todos, setTodos] = useState(() => {
+    const savedTodos = localStorage.getItem("todos");
+    return savedTodos ? JSON.parse(savedTodos) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const addTask = () => {
     if (task.trim() === "") return;
@@ -16,6 +24,7 @@ function App() {
         completed: false,
       },
     ]);
+
     setTask("");
   };
 
@@ -26,7 +35,9 @@ function App() {
   const toggleComplete = (id) => {
     setTodos(
       todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+        todo.id === id
+          ? { ...todo, completed: !todo.completed }
+          : todo
       )
     );
   };
@@ -42,14 +53,23 @@ function App() {
           value={task}
           onChange={(e) => setTask(e.target.value)}
         />
+
         <button onClick={addTask}>Add</button>
       </div>
 
       <ul className="todo-list">
         {todos.map((todo) => (
-          <li key={todo.id} className={todo.completed ? "done" : ""}>
-            <span onClick={() => toggleComplete(todo.id)}>{todo.text}</span>
-            <button onClick={() => deleteTask(todo.id)}>Delete</button>
+          <li
+            key={todo.id}
+            className={todo.completed ? "done" : ""}
+          >
+            <span onClick={() => toggleComplete(todo.id)}>
+              {todo.text}
+            </span>
+
+            <button onClick={() => deleteTask(todo.id)}>
+              Delete
+            </button>
           </li>
         ))}
       </ul>
